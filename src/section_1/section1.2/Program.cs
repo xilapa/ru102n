@@ -1,6 +1,5 @@
 ﻿using StackExchange.Redis;
 
-// TODO for Coding Challenge Start here on starting-point branch
 var options = new ConfigurationOptions
 {
     // add and update parameters as needed
@@ -8,11 +7,10 @@ var options = new ConfigurationOptions
 };
 
 // initalize a multiplexer with ConnectionMultiplexer.Connect()
-var muxer = ConnectionMultiplexer.Connect(options);
+var muxer = await ConnectionMultiplexer.ConnectAsync(options);
 
 // get an IDatabase here with GetDatabase
 var db = muxer.GetDatabase();
 
-// add ping here
+// check connection
 Console.WriteLine($"ping: {db.Ping().TotalMilliseconds} ms");
-// end programming challenge
