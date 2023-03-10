@@ -34,7 +34,18 @@ await sub.SubscribeAsync("notifications", async (_,v) =>
     await chann.Writer.WriteAsync(v);
 });
 
-await foreach (var msg in chann.Reader.ReadAllAsync())
-{
-    Console.WriteLine(msg);
-}
+// await foreach (var msg in chann.Reader.ReadAllAsync())
+// {
+//     Console.WriteLine(msg);
+// }
+
+// transaction
+var transaction = db.CreateTransaction();
+var a = transaction.KeyExistsAsync("test-key");
+var b = transaction.StringSetAsync("test-key", "value", null, When.Always);
+var c = transaction.KeyExistsAsync("test-key");
+await transaction.ExecuteAsync();
+// tasks from transaction can only be awaited after transaction execution
+Console.WriteLine(await a);
+Console.WriteLine(await b);
+Console.WriteLine(await c);
