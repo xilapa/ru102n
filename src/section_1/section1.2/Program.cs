@@ -50,7 +50,7 @@ Console.WriteLine(await a);
 Console.WriteLine(await b);
 Console.WriteLine(await c);
 
-// implicit batch
+// implicit batch (pipeline)
 Console.WriteLine("Implicit pipeline");
 var implicitA = db.StringSetAsync("key1", "one");
 var implicitB = db.StringSetAsync("ke2", "two");
@@ -60,3 +60,16 @@ var implicitD = db.StringGetAsync("key1");
 // D was not
 await Task.WhenAll(implicitA, implicitB, implicitC, implicitD);
 Console.WriteLine(await implicitD);
+
+// explicit batch (pipeline)
+Console.WriteLine("Explicit pipeline");
+var batch = db.CreateBatch();
+var batchA = batch.StringSetAsync("ke1", "one");
+var batchB = batch.StringSetAsync("ke2", "two");
+var batchC = batch.StringSetAsync("ke3", "three");
+var batchD = batch.StringGetAsync("key1");
+batch.Execute();
+Console.WriteLine(await batchA);
+Console.WriteLine(await batchB);
+Console.WriteLine(await batchC);
+Console.WriteLine(await batchD);
