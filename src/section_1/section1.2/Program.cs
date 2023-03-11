@@ -49,3 +49,14 @@ await transaction.ExecuteAsync();
 Console.WriteLine(await a);
 Console.WriteLine(await b);
 Console.WriteLine(await c);
+
+// implicit batch
+Console.WriteLine("Implicit pipeline");
+var implicitA = db.StringSetAsync("key1", "one");
+var implicitB = db.StringSetAsync("ke2", "two");
+var implicitC = db.StringSetAsync("ke3", "three");
+var implicitD = db.StringGetAsync("key1");
+// redis insight profiler show that commands A, B and C are batched,
+// D was not
+await Task.WhenAll(implicitA, implicitB, implicitC, implicitD);
+Console.WriteLine(await implicitD);
